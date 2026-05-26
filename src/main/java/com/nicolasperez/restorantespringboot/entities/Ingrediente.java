@@ -3,6 +3,7 @@ package com.nicolasperez.restorantespringboot.entities;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,10 +40,11 @@ public class Ingrediente implements Serializable {
     private Integer cantidadStock;
     
     // Relaciones
-    
+    @JsonIgnore
     @ManyToMany(mappedBy = "ingredientes")
     private List<Receta> recetas = new ArrayList<>();
-    
+
+    @JsonIgnore
     @ManyToMany(mappedBy = "ingredientes")
     private List<Despensa> despensas = new ArrayList<>();
     

@@ -436,17 +436,51 @@
       <button class="modal-close" onclick="closeModal('modal-agregar')">✕</button>
     </div>
     <div class="modal-body">
-      <p style="font-size:.82rem;color:var(--muted)">
-        Ingredientes registrados en el sistema que aún no están en esta despensa.
-      </p>
-      <div class="field">
-        <label>Seleccionar ingrediente</label>
-        <select id="ma-select" size="8" style="height:auto;min-height:180px"></select>
+
+      <!-- Selector de modo -->
+      <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+        <button id="tab-existente" onclick="setTab('existente')"
+                style="flex:1;padding:8px;font-size:.8rem;font-weight:500;border:none;cursor:pointer;
+                 background:var(--teal);color:#fff;transition:all .15s">
+          Desde el sistema
+        </button>
+        <button id="tab-nuevo" onclick="setTab('nuevo')"
+                style="flex:1;padding:8px;font-size:.8rem;font-weight:500;border:none;cursor:pointer;
+                 background:var(--bg-elevated);color:var(--muted);transition:all .15s">
+          Crear nuevo
+        </button>
       </div>
+
+      <!-- Panel: ingrediente existente -->
+      <div id="panel-existente">
+        <p style="font-size:.8rem;color:var(--muted)">
+          Ingredientes del sistema que aún no están en esta despensa.
+        </p>
+        <div class="field">
+          <label>Seleccionar ingrediente</label>
+          <select id="ma-select" size="7" style="height:auto;min-height:160px"></select>
+        </div>
+      </div>
+
+      <!-- Panel: ingrediente nuevo -->
+      <div id="panel-nuevo" style="display:none">
+        <p style="font-size:.8rem;color:var(--muted)">
+          El ingrediente se crea en el sistema y se agrega a esta despensa.
+        </p>
+        <div class="field">
+          <label>Nombre del ingrediente</label>
+          <input type="text" id="nuevo-descripcion" placeholder="Ej: Pimentón ahumado"/>
+        </div>
+        <div class="field">
+          <label>Cantidad en stock</label>
+          <input type="number" id="nuevo-stock" placeholder="0" min="0" value="0"/>
+        </div>
+      </div>
+
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost"   onclick="closeModal('modal-agregar')">Cancelar</button>
-      <button class="btn btn-primary" onclick="confirmarAgregar()">＋ Agregar</button>
+      <button class="btn btn-primary" id="btn-confirmar-agregar" onclick="confirmarAgregar()">＋ Agregar</button>
     </div>
   </div>
 </div>
@@ -687,33 +721,51 @@
     }
   }
 
+  /* ── tab activo en el modal ── */
+  let tabActual = 'existente';
+
+  function setTab(tab) {
+    tabActual = tab;
+
+    document.getElementById('panel-existente').style.display = tab === 'existente' ? '' : 'none';
+    document.getElementById('panel-nuevo').style.display     = tab === 'nuevo'     ? '' : 'none';
+
+    const estiloActivo   = `background:var(--teal);color:#fff`;
+    const estiloInactivo = `background:var(--bg-elevated);color:var(--muted)`;
+
+    document.getElementById('tab-existente').style.cssText =
+            tab === 'existente' ? estiloActivo : estiloInactivo;
+    document.getElementById('tab-nuevo').style.cssText =
+            tab === 'nuevo' ? estiloActivo : estiloInactivo;
+  }
+
   /* ============================================================
      AGREGAR INGREDIENTE A DESPENSA
      GET /api/ingredientes                   → todos los ingredientes del sistema
      POST /api/despensa/{id}/ingredientes/{ingredienteId}
      ============================================================ */
+  /* ── abrir modal ── */
   async function openAgregarIngModal() {
     try {
-      // Trae TODOS los ingredientes registrados en el sistema
       const res = await fetch(API_INGREDIENTES);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       todosIngredientes = await res.json();
 
-      // Filtra los que YA están en esta despensa
       const idsEnDespensa = new Set(ingredientes.map(i => i.ingredienteId));
       const disponibles   = todosIngredientes.filter(i => !idsEnDespensa.has(i.id));
 
       const sel = document.getElementById('ma-select');
+      sel.innerHTML = disponibles.length
+              ? disponibles
+                      .sort((a, b) => a.descripcion.localeCompare(b.descripcion))
+                      .map(i => `<option value="${i.id}">${i.descripcion} — Stock: ${i.cantidadStock} u.</option>`)
+                      .join('')
+              : '<option disabled>Todos los ingredientes ya están en la despensa</option>';
 
-      if (!disponibles.length) {
-        sel.innerHTML = '<option disabled>Todos los ingredientes del sistema ya están en la despensa</option>';
-      } else {
-        sel.innerHTML = disponibles
-                .sort((a, b) => a.descripcion.localeCompare(b.descripcion))
-                .map(i =>
-                        `<option value="${i.id}">${i.descripcion} — Stock actual: ${i.cantidadStock} u.</option>`
-                ).join('');
-      }
+      // Resetear al tab inicial
+      setTab('existente');
+      document.getElementById('nuevo-descripcion').value = '';
+      document.getElementById('nuevo-stock').value       = '0';
 
       openModal('modal-agregar');
 
@@ -723,18 +775,43 @@
     }
   }
 
+  /* ── confirmar según el tab activo ── */
   async function confirmarAgregar() {
-    const sel           = document.getElementById('ma-select');
-    const ingredienteId = sel.value;
-    if (!ingredienteId) { alert('Seleccioná un ingrediente.'); return; }
-
     try {
+      let ingredienteId;
+
+      if (tabActual === 'existente') {
+        // ── Caso 1: agregar uno ya existente ──────────────────────────
+        const sel = document.getElementById('ma-select');
+        if (!sel.value) { alert('Seleccioná un ingrediente.'); return; }
+        ingredienteId = sel.value;
+
+      } else {
+        // ── Caso 2: crear uno nuevo y luego agregarlo ─────────────────
+        const descripcion = document.getElementById('nuevo-descripcion').value.trim();
+        const stock       = parseInt(document.getElementById('nuevo-stock').value, 10);
+
+        if (!descripcion)        { alert('El nombre es obligatorio.'); return; }
+        if (isNaN(stock) || stock < 0) { alert('El stock debe ser ≥ 0.'); return; }
+
+        // POST /api/ingredientes  →  crea el ingrediente en el sistema
+        const resCrear = await fetch(API_INGREDIENTES, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ descripcion, cantidadStock: stock })
+        });
+        if (!resCrear.ok) throw new Error(`HTTP ${resCrear.status} al crear`);
+
+        const nuevo = await resCrear.json();
+        ingredienteId = nuevo.id;
+      }
+
       // POST /api/despensa/{despensaId}/ingredientes/{ingredienteId}
-      const res = await fetch(
+      const resAgregar = await fetch(
               `${API_DESPENSA}/${DESPENSA_ID}/ingredientes/${ingredienteId}`,
               { method: 'POST' }
       );
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!resAgregar.ok) throw new Error(`HTTP ${resAgregar.status} al agregar`);
 
       closeModal('modal-agregar');
       await cargarDespensa();

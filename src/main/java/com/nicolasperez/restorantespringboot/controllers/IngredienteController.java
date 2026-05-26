@@ -51,4 +51,14 @@ public class IngredienteController {
                 "Stock actualizado"
         );
     }
+
+    @PostMapping
+    public ResponseEntity<Ingrediente> crear(
+            @RequestBody Ingrediente ingrediente
+    ) {
+        return ResponseEntity.ok(
+                ingredienteService.guardar(ingrediente)
+        );
+    }
+
 }
