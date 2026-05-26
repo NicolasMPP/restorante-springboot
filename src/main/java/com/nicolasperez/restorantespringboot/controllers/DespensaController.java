@@ -78,4 +78,29 @@ public class DespensaController {
                         .obtenerEstadisticasDespensa(id)
         );
     }
+    @PostMapping("/{despensaId}/ingredientes/{ingredienteId}")
+    public ResponseEntity<String> agregarIngrediente(
+            @PathVariable Integer despensaId,
+            @PathVariable Integer ingredienteId
+    ) {
+        boolean ok = despensaService
+                .agregarIngredienteADespensa(despensaId, ingredienteId);
+
+        return ok
+                ? ResponseEntity.ok("Ingrediente agregado")
+                : ResponseEntity.badRequest().body("No se pudo agregar");
+    }
+
+    @DeleteMapping("/{despensaId}/ingredientes/{ingredienteId}")
+    public ResponseEntity<String> removerIngrediente(
+            @PathVariable Integer despensaId,
+            @PathVariable Integer ingredienteId
+    ) {
+        boolean ok = despensaService
+                .removerIngredienteDeDespensa(despensaId, ingredienteId);
+
+        return ok
+                ? ResponseEntity.ok("Ingrediente eliminado")
+                : ResponseEntity.badRequest().body("No se pudo eliminar");
+    }
 }
