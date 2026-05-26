@@ -6,270 +6,267 @@
   <title>Despensa — Sistema Restaurante</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg-base:     #111010;
-      --bg-surface:  #1c1b1a;
-      --bg-elevated: #252422;
-      --bg-hover:    #2e2c2a;
-      --gold:        #c9a84c;
-      --gold-light:  #e8cc7a;
-      --gold-dim:    rgba(201,168,76,.15);
-      --cream:       #f0e6cc;
-      --muted:       #7a7268;
-      --danger:      #c0392b;
-      --warn:        #d4821a;
-      --ok:          #2d8a4e;
-      --border:      rgba(201,168,76,.18);
-      --radius:      6px;
-      --shadow:      0 8px 32px rgba(0,0,0,.45);
+      --bg-base:      #f0f2f4;
+      --bg-surface:   #ffffff;
+      --bg-elevated:  #f5f7f9;
+      --bg-hover:     #eaeeee;
+      --teal:         #1a7878;
+      --teal-light:   #2a9898;
+      --teal-dim:     rgba(26,120,120,.1);
+      --teal-border:  rgba(26,120,120,.25);
+      --red:          #cc2222;
+      --red-dim:      rgba(204,34,34,.1);
+      --red-border:   rgba(204,34,34,.3);
+      --text:         #1a2626;
+      --text-sub:     #445555;
+      --muted:        #7a8f8f;
+      --ok:           #1a7878;
+      --warn:         #c07020;
+      --danger:       #cc2222;
+      --border:       #dde4e4;
+      --shadow-sm:    0 1px 4px rgba(0,0,0,.08);
+      --shadow:       0 4px 16px rgba(0,0,0,.1);
+      --radius:       8px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 15px; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg-base);
-      color: var(--cream);
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg-base); color: var(--text); min-height: 100vh; }
     .app-shell { display: flex; min-height: 100vh; }
 
-    /* Sidebar */
+    /* ── Sidebar ── */
     .sidebar {
-      width: 220px; min-height: 100vh;
-      background: var(--bg-surface);
-      border-right: 1px solid var(--border);
-      display: flex; flex-direction: column;
-      padding: 28px 0 24px; flex-shrink: 0;
+      width: 230px; min-height: 100vh; background: var(--bg-surface);
+      border-right: 1px solid var(--border); display: flex; flex-direction: column;
+      flex-shrink: 0; box-shadow: var(--shadow-sm);
     }
-    .sidebar-logo { padding: 0 22px 28px; border-bottom: 1px solid var(--border); }
-    .sidebar-logo h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem; font-weight: 600; color: var(--gold); line-height: 1.2;
-    }
-    .sidebar-logo span { font-size: .72rem; font-weight: 300; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
-    .nav { flex: 1; padding: 18px 0; }
-    .nav-item {
+    .sidebar-brand {
+      padding: 22px 22px 20px;
+      border-bottom: 1px solid var(--border);
       display: flex; align-items: center; gap: 10px;
-      padding: 10px 22px; cursor: pointer;
-      color: var(--muted); font-size: .88rem;
-      border-left: 2px solid transparent;
-      transition: all .18s ease; text-decoration: none;
     }
-    .nav-item:hover { color: var(--cream); background: var(--bg-elevated); }
-    .nav-item.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-dim); }
-    .nav-item .icon { font-size: 1.05rem; width: 18px; text-align: center; }
+    .brand-icon {
+      width: 36px; height: 36px; background: var(--teal);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: .75rem; font-weight: 700; letter-spacing: .05em; flex-shrink: 0;
+    }
+    .brand-name { font-size: .95rem; font-weight: 600; color: var(--text); line-height: 1.2; }
+    .brand-sub  { font-size: .68rem; color: var(--muted); letter-spacing: .04em; }
 
+    .nav { flex: 1; padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; }
+    .nav-section { font-size: .62rem; font-weight: 600; color: var(--muted); letter-spacing: .12em;
+      text-transform: uppercase; padding: 10px 10px 4px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+      cursor: pointer; color: var(--text-sub); font-size: .85rem; font-weight: 400;
+      border-radius: 6px; border: none; background: none; width: 100%;
+      transition: all .15s ease; text-decoration: none;
+    }
+    .nav-item:hover  { color: var(--teal); background: var(--teal-dim); }
+    .nav-item.active { color: var(--teal); background: var(--teal-dim); font-weight: 500; }
+    .nav-item .icon  { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+
+    /* Logo ITU en el fondo del sidebar */
+    .sidebar-footer {
+      padding: 20px 22px;
+      border-top: 1px solid var(--border);
+    }
+    .sidebar-footer img {
+      width: 100%; max-width: 130px; display: block; opacity: .75;
+      transition: opacity .2s;
+    }
+    .sidebar-footer img:hover { opacity: 1; }
+
+    /* ── Main ── */
     .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
-    /* Topbar */
     .topbar {
-      background: var(--bg-surface);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 32px;
-      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg-surface); border-bottom: 1px solid var(--border);
+      padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+      box-shadow: var(--shadow-sm);
     }
-    .topbar-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem; font-weight: 600;
-    }
-    .topbar-title span { color: var(--gold); }
-    .topbar-actions { display: flex; gap: 10px; }
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .topbar-title { font-size: 1.25rem; font-weight: 600; color: var(--text); }
+    .topbar-title span { color: var(--teal); }
+    .topbar-actions { display: flex; gap: 8px; }
 
-    /* Buttons */
+    /* ── Buttons ── */
     .btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 8px 16px; border-radius: var(--radius);
-      font-family: 'DM Sans', sans-serif; font-size: .83rem; font-weight: 500;
-      border: none; cursor: pointer; transition: all .17s ease;
+      display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+      border-radius: 6px; font-family: 'Inter', sans-serif; font-size: .82rem;
+      font-weight: 500; border: none; cursor: pointer; transition: all .15s ease; white-space: nowrap;
     }
-    .btn-primary { background: var(--gold); color: #1a1508; }
-    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(201,168,76,.35); }
-    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
-    .btn-ghost:hover { color: var(--cream); border-color: var(--muted); background: var(--bg-elevated); }
-    .btn-danger { background: rgba(192,57,43,.15); color: #e74c3c; border: 1px solid rgba(192,57,43,.3); }
-    .btn-danger:hover { background: rgba(192,57,43,.25); }
-    .btn-warn { background: rgba(212,130,26,.15); color: #e59866; border: 1px solid rgba(212,130,26,.3); }
-    .btn-warn:hover { background: rgba(212,130,26,.25); }
-    .btn-sm { padding: 6px 12px; font-size: .78rem; }
+    .btn-primary { background: var(--teal); color: #fff; }
+    .btn-primary:hover { background: var(--teal-light); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,120,120,.3); }
+    .btn-ghost { background: transparent; color: var(--text-sub); border: 1px solid var(--border); }
+    .btn-ghost:hover { color: var(--teal); border-color: var(--teal-border); background: var(--teal-dim); }
+    .btn-danger { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); }
+    .btn-danger:hover { background: rgba(204,34,34,.18); }
+    .btn-warn { background: rgba(192,112,32,.1); color: var(--warn); border: 1px solid rgba(192,112,32,.3); }
+    .btn-warn:hover { background: rgba(192,112,32,.18); }
+    .btn-sm { padding: 5px 11px; font-size: .77rem; }
 
     .content { flex: 1; padding: 28px 32px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
 
-    /* Stock highlights */
-    .stock-highlights {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;
+    /* ── Gerente card ── */
+    .gerente-card {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px 20px;
+      display: flex; align-items: center; gap: 14px;
+      box-shadow: var(--shadow-sm);
+      border-left: 3px solid var(--teal);
     }
+    .gerente-avatar {
+      width: 40px; height: 40px; background: var(--teal-dim); border: 1.5px solid var(--teal-border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+    }
+    .gerente-name { font-size: .95rem; font-weight: 600; color: var(--text); }
+    .gerente-role { font-size: .73rem; color: var(--muted); margin-top: 1px; }
+    .gerente-count { margin-left: auto; font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--muted);
+      background: var(--bg-elevated); border: 1px solid var(--border); padding: 3px 10px; border-radius: 100px; }
+
+    /* ── Cards destacadas ── */
+    .cards-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .cards-title  { font-size: .72rem; font-weight: 600; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+
+    .stock-highlights { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px; }
     .stock-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      position: relative; overflow: hidden;
-      transition: border-color .18s;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px 18px;
+      position: relative; overflow: hidden; transition: box-shadow .18s, border-color .18s;
+      box-shadow: var(--shadow-sm);
     }
-    .stock-card:hover { border-color: var(--gold); }
-    .stock-card::before {
-      content: '';
-      position: absolute; left: 0; top: 0; bottom: 0;
-      width: 3px;
-    }
-    .stock-card.ok::before { background: var(--ok); }
-    .stock-card.warn::before { background: var(--warn); }
-    .stock-card.danger::before { background: var(--danger); }
-    .stock-card-icon { font-size: 1.6rem; margin-bottom: 8px; }
-    .stock-card-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 4px; }
-    .stock-card-value {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem; font-weight: 700; line-height: 1;
-    }
-    .stock-card.ok .stock-card-value { color: #52be80; }
-    .stock-card.warn .stock-card-value { color: #e59866; }
-    .stock-card.danger .stock-card-value { color: #e74c3c; }
-    .stock-card-unit { font-size: .75rem; color: var(--muted); margin-top: 2px; }
+    .stock-card:hover { box-shadow: var(--shadow); }
+    .stock-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 8px 0 0 8px; }
+    .stock-card.ok::before     { background: var(--teal); }
+    .stock-card.warn::before   { background: var(--warn); }
+    .stock-card.danger::before { background: var(--red); }
+    .stock-card.config-card    { border-style: dashed; cursor: pointer; display: flex;
+      flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 88px; }
+    .stock-card.config-card:hover { border-color: var(--teal); background: var(--teal-dim); }
+    .stock-card-label { font-size: .68rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+    .stock-card-value { font-size: 2rem; font-weight: 700; line-height: 1; }
+    .stock-card.ok     .stock-card-value { color: var(--teal); }
+    .stock-card.warn   .stock-card-value { color: var(--warn); }
+    .stock-card.danger .stock-card-value { color: var(--red); }
+    .stock-card-unit { font-size: .72rem; color: var(--muted); margin-top: 3px; }
 
-    /* Search & filter bar */
+    /* ── Filter bar ── */
     .filter-bar {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 18px;
-      display: flex; align-items: center; gap: 12px;
-      flex-wrap: wrap;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px 18px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      box-shadow: var(--shadow-sm);
     }
-    .filter-bar label { font-size: .75rem; color: var(--muted); white-space: nowrap; }
+    .filter-bar label { font-size: .75rem; font-weight: 500; color: var(--muted); white-space: nowrap; }
     .filter-bar input, .filter-bar select {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--cream);
-      padding: 7px 12px;
-      font-family: 'DM Sans', sans-serif; font-size: .83rem;
-      outline: none; transition: border-color .17s;
+      background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 6px;
+      color: var(--text); padding: 7px 12px; font-family: 'Inter', sans-serif;
+      font-size: .83rem; outline: none; transition: border-color .15s;
     }
-    .filter-bar input { width: 220px; }
-    .filter-bar input:focus, .filter-bar select:focus { border-color: var(--gold); }
-    .filter-bar select option { background: var(--bg-elevated); }
-    .filter-divider { width: 1px; height: 22px; background: var(--border); flex-shrink: 0; }
+    .filter-bar input { width: 200px; }
+    .filter-bar input:focus, .filter-bar select:focus { border-color: var(--teal); }
+    .filter-bar select option { background: var(--bg-surface); }
+    .filter-divider { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
 
-    /* Table */
+    /* ── Table ── */
     .table-wrapper {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden; flex: 1;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm);
     }
     table { width: 100%; border-collapse: collapse; }
     thead th {
-      background: var(--bg-elevated);
-      color: var(--muted); font-size: .72rem; font-weight: 500;
-      text-transform: uppercase; letter-spacing: .1em;
-      padding: 12px 16px; text-align: left;
+      background: var(--bg-elevated); color: var(--muted); font-size: .69rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .1em; padding: 11px 16px; text-align: left;
       border-bottom: 1px solid var(--border);
     }
-    tbody tr {
-      border-bottom: 1px solid rgba(255,255,255,.04);
-      transition: background .13s; cursor: pointer;
-    }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: var(--bg-hover); }
-    tbody tr.selected { background: var(--gold-dim); }
-    tbody td { padding: 12px 16px; font-size: .85rem; vertical-align: middle; }
-    .td-id { font-family: 'DM Mono', monospace; font-size: .78rem; color: var(--muted); }
-    .td-name { font-weight: 500; }
-    .td-stock { font-family: 'DM Mono', monospace; font-size: .83rem; }
+    tbody tr { border-bottom: 1px solid var(--bg-elevated); transition: background .12s; cursor: pointer; }
+    tbody tr:last-child  { border-bottom: none; }
+    tbody tr:hover       { background: var(--bg-elevated); }
+    tbody tr.selected    { background: var(--teal-dim); }
+    tbody td { padding: 11px 16px; font-size: .84rem; vertical-align: middle; }
+    .td-id    { font-family: 'DM Mono', monospace; font-size: .76rem; color: var(--muted); }
+    .td-name  { font-weight: 500; color: var(--text); }
+    .td-stock { font-family: 'DM Mono', monospace; font-size: .82rem; color: var(--text-sub); }
 
-    /* Status badges */
     .status-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 3px 10px; border-radius: 100px;
-      font-size: .72rem; font-weight: 500; white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px;
+      border-radius: 100px; font-size: .7rem; font-weight: 600; white-space: nowrap;
     }
-    .status-ok     { background: rgba(45,138,78,.18); color: #52be80; }
-    .status-warn   { background: rgba(212,130,26,.18); color: #e59866; }
-    .status-danger { background: rgba(192,57,43,.18); color: #e74c3c; }
-    .status-badge::before { content: '●'; font-size: .5rem; }
+    .status-ok     { background: rgba(26,120,120,.1); color: var(--teal); }
+    .status-warn   { background: rgba(192,112,32,.1); color: var(--warn); }
+    .status-danger { background: var(--red-dim); color: var(--red); }
+    .status-badge::before { content: '●'; font-size: .45rem; }
 
-    /* Action bar */
-    .action-bar {
-      display: flex; gap: 8px; flex-wrap: wrap;
-    }
+    .action-bar { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    /* Status bar */
+    /* ── Status bar ── */
     .statusbar {
-      background: var(--bg-surface);
-      border-top: 1px solid var(--border);
-      padding: 9px 32px;
-      font-size: .75rem; color: var(--muted);
+      background: var(--bg-surface); border-top: 1px solid var(--border);
+      padding: 8px 32px; font-size: .74rem; color: var(--muted);
       display: flex; align-items: center; gap: 8px;
     }
-    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); flex-shrink: 0; }
-    .status-dot.error { background: var(--danger); }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+    .status-dot.error { background: var(--red); }
 
-    /* ── MODAL base ── */
+    /* ── Modals ── */
     .modal-backdrop {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,.72); backdrop-filter: blur(3px);
+      position: fixed; inset: 0; background: rgba(26,38,38,.45); backdrop-filter: blur(4px);
       display: flex; align-items: center; justify-content: center;
-      z-index: 100; opacity: 0; pointer-events: none;
-      transition: opacity .22s ease;
+      z-index: 100; opacity: 0; pointer-events: none; transition: opacity .2s ease;
     }
     .modal-backdrop.open { opacity: 1; pointer-events: all; }
     .modal {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      box-shadow: var(--shadow);
-      width: 480px; max-width: 92vw;
-      transform: translateY(18px) scale(.97);
-      transition: transform .24s cubic-bezier(.16,1,.3,1);
-      overflow: hidden;
+      background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px;
+      box-shadow: var(--shadow); width: 480px; max-width: 92vw;
+      transform: translateY(16px) scale(.97); transition: transform .22s cubic-bezier(.16,1,.3,1); overflow: hidden;
     }
     .modal-backdrop.open .modal { transform: translateY(0) scale(1); }
     .modal-header {
       padding: 18px 24px 16px; border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
     }
-    .modal-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15rem; font-weight: 600;
-    }
-    .modal-close {
-      background: none; border: none; color: var(--muted);
-      cursor: pointer; font-size: 1.1rem; padding: 4px 8px;
-      border-radius: 4px; transition: color .15s;
-    }
-    .modal-close:hover { color: var(--cream); }
-    .modal-body { padding: 22px 24px; display: flex; flex-direction: column; gap: 16px; }
-    .modal-footer { padding: 14px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+    .modal-title { font-size: 1rem; font-weight: 600; color: var(--text); }
+    .modal-close { background: none; border: none; color: var(--muted); cursor: pointer;
+      font-size: 1rem; padding: 4px 8px; border-radius: 4px; transition: all .15s; }
+    .modal-close:hover { color: var(--red); background: var(--red-dim); }
+    .modal-body   { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
+    .modal-footer { padding: 14px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
 
-    .field { display: flex; flex-direction: column; gap: 6px; }
-    .field label { font-size: .78rem; color: var(--muted); }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field label { font-size: .75rem; font-weight: 500; color: var(--text-sub); }
     .field input, .field select {
-      background: var(--bg-elevated); border: 1px solid var(--border);
-      border-radius: var(--radius); color: var(--cream);
-      padding: 9px 12px; font-family: 'DM Sans', sans-serif; font-size: .85rem;
-      outline: none; transition: border-color .17s;
+      background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 6px;
+      color: var(--text); padding: 8px 12px; font-family: 'Inter', sans-serif;
+      font-size: .84rem; outline: none; transition: border-color .15s;
     }
-    .field input:focus, .field select:focus { border-color: var(--gold); }
-    .field select option { background: var(--bg-elevated); }
+    .field input:focus, .field select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(26,120,120,.1); }
+    .field select option { background: var(--bg-surface); }
 
-    .field-info {
-      background: var(--bg-elevated); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 10px 14px;
+    .field-info { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; }
+    .field-info .fi-label { font-size: .69rem; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2px; }
+    .field-info .fi-value { font-size: 1rem; font-weight: 600; color: var(--text); }
+
+    /* Config checkboxes */
+    .config-list { max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .config-list label {
+      display: flex; align-items: center; gap: 10px; padding: 9px 14px;
+      cursor: pointer; font-size: .83rem; background: var(--bg-surface);
+      border-bottom: 1px solid var(--bg-elevated); transition: background .12s;
     }
-    .field-info .fi-label { font-size: .72rem; color: var(--muted); margin-bottom: 2px; }
-    .field-info .fi-value { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; }
+    .config-list label:last-child { border-bottom: none; }
+    .config-list label:hover { background: var(--teal-dim); }
+    .config-list input[type="checkbox"] { accent-color: var(--teal); width: 15px; height: 15px; flex-shrink: 0; }
+    .config-stock { margin-left: auto; font-family: 'DM Mono', monospace; font-size: .73rem; color: var(--muted); }
 
-    /* Stock low alert panel */
+    /* Alert panel */
     .alert-panel {
       position: fixed; right: 0; top: 0; bottom: 0; width: 340px;
       background: var(--bg-surface); border-left: 1px solid var(--border);
-      box-shadow: -12px 0 40px rgba(0,0,0,.4);
-      z-index: 50;
-      transform: translateX(100%);
-      transition: transform .26s cubic-bezier(.16,1,.3,1);
+      box-shadow: -8px 0 32px rgba(0,0,0,.1); z-index: 50;
+      transform: translateX(100%); transition: transform .24s cubic-bezier(.16,1,.3,1);
       display: flex; flex-direction: column;
     }
     .alert-panel.open { transform: translateX(0); }
@@ -277,75 +274,86 @@
       padding: 18px 22px 14px; border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
     }
-    .alert-panel-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem; font-weight: 600; color: #e59866;
-    }
-    .alert-panel-body { padding: 18px 22px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .alert-panel-title { font-size: 1rem; font-weight: 600; color: var(--warn); }
+    .alert-panel-body  { padding: 16px 20px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 8px; }
     .alert-item {
       display: flex; align-items: center; justify-content: space-between;
       background: var(--bg-elevated); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 10px 14px;
+      border-radius: 6px; padding: 10px 14px;
     }
-    .alert-item-name { font-size: .85rem; font-weight: 500; }
-    .alert-item-stock { font-family: 'DM Mono', monospace; font-size: .8rem; }
-    .alert-item-stock.zero { color: #e74c3c; }
-    .alert-item-stock.low  { color: #e59866; }
+    .alert-item-name  { font-size: .84rem; font-weight: 500; }
+    .alert-item-stock { font-family: 'DM Mono', monospace; font-size: .78rem; }
+    .alert-item-stock.zero { color: var(--red); font-weight: 600; }
+    .alert-item-stock.low  { color: var(--warn); }
 
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--bg-hover); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
   </style>
 </head>
 <body>
 <div class="app-shell">
 
-  <!-- Sidebar -->
+  <!-- ── Sidebar ── -->
   <aside class="sidebar">
-    <div class="sidebar-logo">
-      <h1>Ristorante</h1>
-      <span>Sistema de Gestión</span>
+    <div class="sidebar-brand">
+      <div class="brand-icon">RS</div>
+      <div>
+        <div class="brand-name">Ristorante</div>
+        <div class="brand-sub">Sistema de Gestión</div>
+      </div>
     </div>
+
     <nav class="nav">
-      <a class="nav-item" href="/menu">
-        <span class="icon">🍽️</span> Menú
-      </a>
-      <a class="nav-item active" href="/despensa">
-        <span class="icon">🏪</span> Despensa
-      </a>
+      <div class="nav-section">Módulos</div>
+      <a class="nav-item" href="/menu"><span class="icon">🍽️</span> Menú</a>
+      <a class="nav-item active" href="/despensa"><span class="icon">🏪</span> Despensa</a>
     </nav>
+
+    <!-- Logo ITU — abajo a la izquierda -->
+    <!-- Colocá el archivo en: src/main/resources/static/images/logo-itu.png -->
+    <div class="sidebar-footer">
+      <img src="/images/logo_itu.webp" alt="Instituto Tecnológico Universitario"
+           onerror="this.style.display='none'"/>
+    </div>
   </aside>
 
-  <!-- Main -->
+  <!-- ── Main ── -->
   <div class="main">
-    <!-- Topbar -->
+
     <div class="topbar">
-      <div class="topbar-title">Gestión de <span>Despensa</span></div>
+      <div class="topbar-left">
+        <div class="topbar-title">Gestión de <span>Despensa</span></div>
+      </div>
       <div class="topbar-actions">
-        <button class="btn btn-ghost" onclick="refreshDespensa()">↻ Refrescar</button>
-        <button class="btn btn-warn" onclick="verStockBajo()">⚠ Stock Bajo</button>
+        <button class="btn btn-ghost"   onclick="refreshDespensa()">↻ Refrescar</button>
+        <button class="btn btn-warn"    onclick="verStockBajo()">⚠ Stock Bajo</button>
         <button class="btn btn-primary" onclick="openAgregarIngModal()">＋ Agregar Ingrediente</button>
       </div>
     </div>
 
-    <!-- Content -->
     <div class="content">
 
-      <!-- Gerente info + stock cards -->
-      <div id="gerente-info" style="display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);">
-        <div style="font-size:1.4rem">👤</div>
+      <!-- Gerente -->
+      <div class="gerente-card">
+        <div class="gerente-avatar">👤</div>
         <div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600" id="gerente-nombre">Martín Vargas</div>
-          <div style="font-size:.75rem;color:var(--muted)">Gerente responsable de esta despensa</div>
+          <div class="gerente-name" id="gerente-nombre">Martín Vargas</div>
+          <div class="gerente-role">Gerente responsable de esta despensa</div>
         </div>
-        <div style="margin-left:auto;font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted)" id="total-label">— ingredientes</div>
+        <div class="gerente-count" id="total-label">— ingredientes</div>
       </div>
 
-      <!-- Stock highlights -->
-      <div class="stock-highlights" id="stock-cards"></div>
+      <!-- Tarjetas destacadas -->
+      <div>
+        <div class="cards-header">
+          <span class="cards-title">Ingredientes destacados</span>
+        </div>
+        <div class="stock-highlights" id="stock-cards"></div>
+      </div>
 
-      <!-- Filter bar -->
+      <!-- Filtros -->
       <div class="filter-bar">
         <label>Buscar:</label>
         <input type="text" id="search-input" placeholder="Nombre del ingrediente…" oninput="applyFilter()"/>
@@ -360,31 +368,30 @@
         <button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕ Limpiar</button>
       </div>
 
-      <!-- Table -->
+      <!-- Tabla -->
       <div class="table-wrapper">
         <table>
           <thead>
-            <tr>
-              <th style="width:60px">ID</th>
-              <th>Ingrediente</th>
-              <th>Stock Actual</th>
-              <th>Estado</th>
-              <th style="width:80px">Acciones</th>
-            </tr>
+          <tr>
+            <th style="width:60px">ID</th>
+            <th>Ingrediente</th>
+            <th>Stock Actual</th>
+            <th>Estado</th>
+            <th style="width:80px">Editar</th>
+          </tr>
           </thead>
           <tbody id="despensa-tbody"></tbody>
         </table>
       </div>
 
-      <!-- Action bar -->
+      <!-- Acciones -->
       <div class="action-bar">
-        <button class="btn btn-ghost btn-sm" onclick="actualizarStock()">📝 Actualizar Stock</button>
+        <button class="btn btn-ghost btn-sm"  onclick="actualizarStock()">📝 Actualizar Stock</button>
         <button class="btn btn-danger btn-sm" onclick="eliminarIngrediente()">— Eliminar de Despensa</button>
       </div>
 
-    </div><!-- /content -->
+    </div>
 
-    <!-- Status bar -->
     <div class="statusbar">
       <div class="status-dot" id="status-dot"></div>
       <span id="status-text">Listo</span>
@@ -393,7 +400,7 @@
 </div>
 
 
-<!-- ───── MODAL: Actualizar Stock ───── -->
+<!-- ── MODAL: Actualizar Stock ── -->
 <div class="modal-backdrop" id="modal-stock">
   <div class="modal">
     <div class="modal-header">
@@ -402,7 +409,7 @@
     </div>
     <div class="modal-body">
       <div class="field-info">
-        <div class="fi-label">Ingrediente seleccionado</div>
+        <div class="fi-label">Ingrediente</div>
         <div class="fi-value" id="ms-nombre">—</div>
       </div>
       <div class="field-info">
@@ -415,13 +422,13 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-stock')">Cancelar</button>
+      <button class="btn btn-ghost"   onclick="closeModal('modal-stock')">Cancelar</button>
       <button class="btn btn-primary" onclick="confirmarStock()">✓ Actualizar</button>
     </div>
   </div>
 </div>
 
-<!-- ───── MODAL: Agregar Ingrediente ───── -->
+<!-- ── MODAL: Agregar Ingrediente ── -->
 <div class="modal-backdrop" id="modal-agregar">
   <div class="modal">
     <div class="modal-header">
@@ -430,23 +437,41 @@
     </div>
     <div class="modal-body">
       <p style="font-size:.82rem;color:var(--muted)">
-        Seleccioná un ingrediente del sistema que aún no esté en esta despensa.
+        Ingredientes registrados en el sistema que aún no están en esta despensa.
       </p>
       <div class="field">
-        <label>Ingrediente disponible</label>
-        <select id="ma-select" size="8" style="height:auto;min-height:160px">
-          <!-- populated by JS -->
-        </select>
+        <label>Seleccionar ingrediente</label>
+        <select id="ma-select" size="8" style="height:auto;min-height:180px"></select>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-agregar')">Cancelar</button>
+      <button class="btn btn-ghost"   onclick="closeModal('modal-agregar')">Cancelar</button>
       <button class="btn btn-primary" onclick="confirmarAgregar()">＋ Agregar</button>
     </div>
   </div>
 </div>
 
-<!-- ───── PANEL: Stock Bajo ───── -->
+<!-- ── MODAL: Configurar Destacados ── -->
+<div class="modal-backdrop" id="modal-config">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Ingredientes Destacados</span>
+      <button class="modal-close" onclick="closeModal('modal-config')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:.82rem;color:var(--muted)">
+        Seleccioná los ingredientes que quieras ver en las tarjetas superiores.
+      </p>
+      <div class="config-list" id="config-ingredientes"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost"   onclick="closeModal('modal-config')">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmarConfig()">✓ Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PANEL: Stock Bajo ── -->
 <div class="alert-panel" id="alert-panel">
   <div class="alert-panel-header">
     <span class="alert-panel-title">⚠ Alertas de Stock</span>
@@ -458,495 +483,386 @@
 
 <script>
   /* ============================================================
-     DESPENSA - Integrado con Spring Boot REST API
+     CONFIG
      ============================================================ */
+  const API_DESPENSA     = '/api/despensa';
+  const API_INGREDIENTES = '/api/ingredientes';
+  const DESPENSA_ID      = 1;
 
-  const API_DESPENSA = '/api/despensa';
-  const DESPENSA_ID = 1;
+  let ingredientes      = [];   // IngredienteDetalleDTO[]  { ingredienteId, descripcion, cantidadStock }
+  let todosIngredientes = [];   // Ingrediente[]            { id, descripcion, cantidadStock }
+  let selectedId        = null; // ingredienteId actualmente seleccionado en la tabla
+  let displayItems      = [];
+  let featuredNames     = ['Carne Vacuna', 'Tomate']; // configurables por el usuario
 
-  let ingredientes = [];
-  let selectedId = null;
-  let displayItems = [];
-
-  /* ─────────────────────────────────────────────────────────────
-     API
-     ───────────────────────────────────────────────────────────── */
-
+  /* ============================================================
+     CARGA
+     GET /api/despensa/{id}/ingredientes → List<IngredienteDetalleDTO>
+     ============================================================ */
   async function cargarDespensa() {
-
     try {
+      setStatus('Cargando despensa…', true);
 
-      setStatus(
-              'Cargando despensa...',
-              true
-      );
+      const res = await fetch(`${API_DESPENSA}/${DESPENSA_ID}/ingredientes`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-      const response = await fetch(
-              `${API_DESPENSA}/${DESPENSA_ID}/ingredientes`
-      );
-
-      if (!response.ok) {
-
-        throw new Error(
-                'Error al cargar despensa'
-        );
-      }
-
-      ingredientes = await response.json();
-
+      ingredientes = await res.json();
       displayItems = [...ingredientes];
 
       renderCards();
-
       renderTable(displayItems);
 
-    } catch (error) {
-
-      console.error(error);
-
-      setStatus(
-              '✗ Error al cargar despensa',
-              false
-      );
+    } catch (err) {
+      console.error('[cargarDespensa]', err);
+      setStatus('✗ Error al cargar despensa', false);
     }
   }
 
-  async function refreshDespensa() {
+  async function refreshDespensa() { await cargarDespensa(); }
 
-    await cargarDespensa();
-  }
-
-  /* ─────────────────────────────────────────────────────────────
-     Helpers
-     ───────────────────────────────────────────────────────────── */
-
+  /* ============================================================
+     HELPERS
+     ============================================================ */
   function getStatus(stock) {
-
-    if (stock === 0) {
-
-      return {
-        cls:'status-danger',
-        text:'Sin stock'
-      };
-    }
-
-    if (stock < 10) {
-
-      return {
-        cls:'status-warn',
-        text:'Stock bajo'
-      };
-    }
-
-    return {
-      cls:'status-ok',
-      text:'Disponible'
-    };
+    if (stock === 0) return { cls: 'status-danger', text: 'Sin stock'  };
+    if (stock < 10)  return { cls: 'status-warn',   text: 'Stock bajo' };
+    return                  { cls: 'status-ok',     text: 'Disponible' };
   }
-
   function getCardClass(stock) {
-
     if (stock === 0) return 'danger';
-
-    if (stock < 10) return 'warn';
-
+    if (stock < 10)  return 'warn';
     return 'ok';
   }
 
-  /* ─────────────────────────────────────────────────────────────
-     Cards
-     ───────────────────────────────────────────────────────────── */
-
+  /* ============================================================
+     TARJETAS DESTACADAS
+     ============================================================ */
   function renderCards() {
+    const div = document.getElementById('stock-cards');
 
-    const div =
-            document.getElementById(
-                    'stock-cards'
-            );
+    const featured = featuredNames
+            .map(n => ingredientes.find(
+                    i => i.descripcion.toLowerCase().includes(n.toLowerCase())
+            ))
+            .filter(Boolean);
 
-    const top =
-            ingredientes.slice(0, 3);
-
-    div.innerHTML = top.map(i => `
-
-    <div class="stock-card ${getCardClass(i.cantidadStock)}">
-
-      <div class="stock-card-label">
-        ${i.descripcion}
+    const cardsHTML = featured.map(i => `
+      <div class="stock-card ${getCardClass(i.cantidadStock)}">
+        <div class="stock-card-label">${i.descripcion}</div>
+        <div class="stock-card-value">${i.cantidadStock}</div>
+        <div class="stock-card-unit">unidades en stock</div>
       </div>
+    `).join('');
 
-      <div class="stock-card-value">
-        ${i.cantidadStock}
+    const configCard = `
+      <div class="stock-card config-card" onclick="openConfigCards()" title="Configurar tarjetas destacadas">
+        <span style="font-size:1.3rem;color:var(--teal);opacity:.6">⚙</span>
+        <span style="font-size:.7rem;font-weight:600;color:var(--muted);text-align:center;line-height:1.5;text-transform:uppercase;letter-spacing:.08em">
+          Configurar<br>destacados
+        </span>
       </div>
+    `;
 
-      <div class="stock-card-unit">
-        unidades
-      </div>
-
-    </div>
-
-  `).join('');
+    div.innerHTML = cardsHTML + configCard;
   }
 
-  /* ─────────────────────────────────────────────────────────────
-     Table
-     ───────────────────────────────────────────────────────────── */
-
+  /* ============================================================
+     TABLA
+     ============================================================ */
   function renderTable(items) {
-
-    const tbody =
-            document.getElementById(
-                    'despensa-tbody'
-            );
-
+    const tbody = document.getElementById('despensa-tbody');
     tbody.innerHTML = '';
 
     if (!items.length) {
-
       tbody.innerHTML = `
-      <tr>
-        <td colspan="5">
-          Sin resultados
-        </td>
-      </tr>
-    `;
-
+        <tr><td colspan="5"
+          style="text-align:center;color:var(--muted);padding:32px;font-size:.83rem">
+          Sin resultados para el filtro actual
+        </td></tr>`;
       return;
     }
 
     items.forEach(ing => {
+      const { cls, text } = getStatus(ing.cantidadStock);
+      const tr = document.createElement('tr');
 
-      const { cls, text } =
-              getStatus(ing.cantidadStock);
-
-      const tr =
-              document.createElement('tr');
-
-      if (selectedId === ing.id) {
-
-        tr.classList.add('selected');
-      }
+      if (selectedId === ing.ingredienteId) tr.classList.add('selected');
 
       tr.innerHTML = `
-      <td>${ing.id}</td>
-
-      <td>${ing.descripcion}</td>
-
-      <td>
-        ${ing.cantidadStock}
-      </td>
-
-      <td>
-        <span class="status-badge ${cls}">
-          ${text}
-        </span>
-      </td>
-
-      <td>
-        <button
-          class="btn btn-ghost btn-sm"
-          onclick="quickUpdate(${ing.id}, event)"
-        >
-          ✎
-        </button>
-      </td>
-    `;
+        <td class="td-id">${ing.ingredienteId}</td>
+        <td class="td-name">${ing.descripcion}</td>
+        <td class="td-stock">${ing.cantidadStock}
+          <span style="color:var(--muted);font-size:.7rem;font-weight:400"> unidades</span>
+        </td>
+        <td><span class="status-badge ${cls}">${text}</span></td>
+        <td>
+          <button class="btn btn-ghost btn-sm" style="padding:4px 9px"
+            onclick="quickUpdate(${ing.ingredienteId}, event)" title="Editar stock">✎</button>
+        </td>
+      `;
 
       tr.addEventListener('click', e => {
-
-        if (
-                e.target.tagName === 'BUTTON'
-        ) return;
-
-        selectRow(ing.id, tr);
+        if (e.target.tagName === 'BUTTON') return;
+        selectRow(ing.ingredienteId, tr);
       });
 
       tbody.appendChild(tr);
     });
 
-    document.getElementById(
-            'total-label'
-    ).textContent =
+    document.getElementById('total-label').textContent =
             `${ingredientes.length} ingredientes`;
-
-    setStatus(
-            `✓ Despensa cargada`,
-            true
-    );
+    setStatus(`✓ Despensa cargada — ${ingredientes.length} ingredientes`, true);
   }
 
   function selectRow(id, tr) {
-
-    document.querySelectorAll(
-            '#despensa-tbody tr'
-    ).forEach(r => r.classList.remove('selected'));
-
-    if (selectedId === id) {
-
-      selectedId = null;
-      return;
-    }
-
+    document.querySelectorAll('#despensa-tbody tr').forEach(r => r.classList.remove('selected'));
+    if (selectedId === id) { selectedId = null; return; }
     selectedId = id;
-
     tr.classList.add('selected');
   }
 
-  /* ─────────────────────────────────────────────────────────────
-     Filters
-     ───────────────────────────────────────────────────────────── */
-
+  /* ============================================================
+     FILTROS
+     ============================================================ */
   function applyFilter() {
+    const q      = document.getElementById('search-input').value.toLowerCase();
+    const filter = document.getElementById('filter-select').value;
 
-    const q =
-            document.getElementById(
-                    'search-input'
-            ).value.toLowerCase();
-
-    const filter =
-            document.getElementById(
-                    'filter-select'
-            ).value;
-
-    displayItems =
-            ingredientes.filter(ing => {
-
-              const matchQ =
-                      ing.descripcion
-                              .toLowerCase()
-                              .includes(q);
-
-              let matchF = true;
-
-              if (filter === 'ok') {
-
-                matchF =
-                        ing.cantidadStock > 0;
-              }
-
-              if (filter === 'low') {
-
-                matchF =
-                        ing.cantidadStock > 0
-                        && ing.cantidadStock < 10;
-              }
-
-              if (filter === 'zero') {
-
-                matchF =
-                        ing.cantidadStock === 0;
-              }
-
-              return matchQ && matchF;
-            });
+    displayItems = ingredientes.filter(ing => {
+      const matchQ = ing.descripcion.toLowerCase().includes(q);
+      let   matchF = true;
+      if (filter === 'ok')   matchF = ing.cantidadStock > 0;
+      if (filter === 'low')  matchF = ing.cantidadStock > 0 && ing.cantidadStock < 10;
+      if (filter === 'zero') matchF = ing.cantidadStock === 0;
+      return matchQ && matchF;
+    });
 
     renderTable(displayItems);
   }
 
   function clearFilters() {
-
-    document.getElementById(
-            'search-input'
-    ).value = '';
-
-    document.getElementById(
-            'filter-select'
-    ).value = 'all';
-
+    document.getElementById('search-input').value  = '';
+    document.getElementById('filter-select').value = 'all';
     applyFilter();
   }
 
-  /* ─────────────────────────────────────────────────────────────
-     Actualizar stock
-     ───────────────────────────────────────────────────────────── */
-
+  /* ============================================================
+     ACTUALIZAR STOCK
+     PUT /api/ingredientes/{id}/stock?stock={value}
+     ============================================================ */
   function actualizarStock() {
-
-    if (!selectedId) {
-
-      alert('Seleccioná un ingrediente.');
-      return;
-    }
-
-    const ing =
-            ingredientes.find(
-                    i => i.id === selectedId
-            );
-
-    document.getElementById(
-            'ms-nombre'
-    ).textContent =
-            ing.descripcion;
-
-    document.getElementById(
-            'ms-actual'
-    ).textContent =
-            `${ing.cantidadStock} unidades`;
-
-    document.getElementById(
-            'ms-nuevo'
-    ).value =
-            ing.cantidadStock;
-
+    if (!selectedId) { alert('Seleccioná un ingrediente de la tabla primero.'); return; }
+    const ing = ingredientes.find(i => i.ingredienteId === selectedId);
+    document.getElementById('ms-nombre').textContent = ing.descripcion;
+    document.getElementById('ms-actual').textContent = `${ing.cantidadStock} unidades`;
+    document.getElementById('ms-nuevo').value = ing.cantidadStock;
     openModal('modal-stock');
   }
 
   function quickUpdate(id, e) {
-
     e.stopPropagation();
-
     selectedId = id;
-
     actualizarStock();
   }
 
   async function confirmarStock() {
-
-    const nuevo =
-            parseInt(
-                    document.getElementById(
-                            'ms-nuevo'
-                    ).value,
-                    10
-            );
-
-    if (isNaN(nuevo) || nuevo < 0) {
-
-      alert('Valor inválido');
-      return;
-    }
+    const nuevo = parseInt(document.getElementById('ms-nuevo').value, 10);
+    if (isNaN(nuevo) || nuevo < 0) { alert('Ingresá un número válido ≥ 0.'); return; }
 
     try {
-
-      const response = await fetch(
-              `${API_DESPENSA}/ingredientes/${selectedId}/stock?nuevoStock=${nuevo}`,
-              {
-                method: 'PUT'
-              }
+      // PUT /api/ingredientes/{ingredienteId}/stock?stock={nuevoValor}
+      const res = await fetch(
+              `${API_INGREDIENTES}/${selectedId}/stock?stock=${nuevo}`,
+              { method: 'PUT' }
       );
-
-      if (!response.ok) {
-
-        throw new Error(
-                'Error actualizando stock'
-        );
-      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       closeModal('modal-stock');
-
       await cargarDespensa();
+      setStatus('✓ Stock actualizado correctamente', true);
 
-      setStatus(
-              '✓ Stock actualizado',
-              true
-      );
-
-    } catch (error) {
-
-      console.error(error);
-
-      setStatus(
-              '✗ Error actualizando stock',
-              false
-      );
+    } catch (err) {
+      console.error('[confirmarStock]', err);
+      setStatus('✗ Error al actualizar stock', false);
     }
   }
 
-  /* ─────────────────────────────────────────────────────────────
-     Stock bajo
-     ───────────────────────────────────────────────────────────── */
+  /* ============================================================
+     AGREGAR INGREDIENTE A DESPENSA
+     GET /api/ingredientes                   → todos los ingredientes del sistema
+     POST /api/despensa/{id}/ingredientes/{ingredienteId}
+     ============================================================ */
+  async function openAgregarIngModal() {
+    try {
+      // Trae TODOS los ingredientes registrados en el sistema
+      const res = await fetch(API_INGREDIENTES);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      todosIngredientes = await res.json();
 
+      // Filtra los que YA están en esta despensa
+      const idsEnDespensa = new Set(ingredientes.map(i => i.ingredienteId));
+      const disponibles   = todosIngredientes.filter(i => !idsEnDespensa.has(i.id));
+
+      const sel = document.getElementById('ma-select');
+
+      if (!disponibles.length) {
+        sel.innerHTML = '<option disabled>Todos los ingredientes del sistema ya están en la despensa</option>';
+      } else {
+        sel.innerHTML = disponibles
+                .sort((a, b) => a.descripcion.localeCompare(b.descripcion))
+                .map(i =>
+                        `<option value="${i.id}">${i.descripcion} — Stock actual: ${i.cantidadStock} u.</option>`
+                ).join('');
+      }
+
+      openModal('modal-agregar');
+
+    } catch (err) {
+      console.error('[openAgregarIngModal]', err);
+      setStatus('✗ Error al cargar ingredientes disponibles', false);
+    }
+  }
+
+  async function confirmarAgregar() {
+    const sel           = document.getElementById('ma-select');
+    const ingredienteId = sel.value;
+    if (!ingredienteId) { alert('Seleccioná un ingrediente.'); return; }
+
+    try {
+      // POST /api/despensa/{despensaId}/ingredientes/{ingredienteId}
+      const res = await fetch(
+              `${API_DESPENSA}/${DESPENSA_ID}/ingredientes/${ingredienteId}`,
+              { method: 'POST' }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      closeModal('modal-agregar');
+      await cargarDespensa();
+      setStatus('✓ Ingrediente agregado a la despensa', true);
+
+    } catch (err) {
+      console.error('[confirmarAgregar]', err);
+      setStatus('✗ Error al agregar ingrediente', false);
+    }
+  }
+
+  /* ============================================================
+     ELIMINAR INGREDIENTE DE DESPENSA
+     DELETE /api/despensa/{id}/ingredientes/{ingredienteId}
+     ============================================================ */
+  async function eliminarIngrediente() {
+    if (!selectedId) { alert('Seleccioná un ingrediente de la tabla primero.'); return; }
+
+    const ing = ingredientes.find(i => i.ingredienteId === selectedId);
+    if (!confirm(
+            `¿Eliminar "${ing.descripcion}" de esta despensa?\n\n` +
+            `El ingrediente no se borra del sistema, solo se desvincula de esta despensa.`
+    )) return;
+
+    try {
+      // DELETE /api/despensa/{despensaId}/ingredientes/{ingredienteId}
+      const res = await fetch(
+              `${API_DESPENSA}/${DESPENSA_ID}/ingredientes/${selectedId}`,
+              { method: 'DELETE' }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      selectedId = null;
+      await cargarDespensa();
+      setStatus(`✓ "${ing.descripcion}" eliminado de la despensa`, true);
+
+    } catch (err) {
+      console.error('[eliminarIngrediente]', err);
+      setStatus('✗ Error al eliminar ingrediente', false);
+    }
+  }
+
+  /* ============================================================
+     STOCK BAJO
+     GET /api/despensa/{id}/stock-bajo?umbral=10
+     (o filtrado local si ya tenés los datos)
+     ============================================================ */
   function verStockBajo() {
+    const bajos = ingredientes
+            .filter(i => i.cantidadStock < 10)
+            .sort((a, b) => a.cantidadStock - b.cantidadStock);
 
-    const bajos =
-            ingredientes.filter(
-                    i => i.cantidadStock < 10
-            );
-
-    const body =
-            document.getElementById(
-                    'alert-body'
-            );
+    const body = document.getElementById('alert-body');
 
     if (!bajos.length) {
-
-      body.innerHTML =
-              '<p>✓ Sin alertas</p>';
-
+      body.innerHTML = `
+        <div style="text-align:center;padding:24px">
+          <div style="font-size:2rem;margin-bottom:8px">✅</div>
+          <p style="color:var(--muted);font-size:.84rem">Todos los ingredientes tienen stock suficiente.</p>
+        </div>`;
     } else {
-
-      body.innerHTML =
-              bajos.map(ing => `
-
-        <div class="alert-item">
-
-          <span class="alert-item-name">
-            ${ing.descripcion}
-          </span>
-
-          <span class="alert-item-stock">
-
-            ${ing.cantidadStock === 0
-                      ? 'SIN STOCK'
-                      : ing.cantidadStock + ' unidades'}
-
-          </span>
-
-        </div>
-
-      `).join('');
+      body.innerHTML = bajos.map(ing => {
+        const cls = ing.cantidadStock === 0 ? 'zero' : 'low';
+        const lbl = ing.cantidadStock === 0 ? 'SIN STOCK' : `${ing.cantidadStock} unidades`;
+        return `
+          <div class="alert-item">
+            <span class="alert-item-name">${ing.descripcion}</span>
+            <span class="alert-item-stock ${cls}">${lbl}</span>
+          </div>`;
+      }).join('');
     }
 
-    document
-            .getElementById('alert-panel')
-            .classList.add('open');
+    document.getElementById('alert-panel').classList.add('open');
   }
 
   function closeAlertPanel() {
-
-    document
-            .getElementById('alert-panel')
-            .classList.remove('open');
+    document.getElementById('alert-panel').classList.remove('open');
   }
 
-  /* ─────────────────────────────────────────────────────────────
-     Modal
-     ───────────────────────────────────────────────────────────── */
+  /* ============================================================
+     CONFIGURAR TARJETAS DESTACADAS
+     ============================================================ */
+  function openConfigCards() {
+    const container = document.getElementById('config-ingredientes');
 
-  function openModal(id) {
+    container.innerHTML = ingredientes
+            .slice()
+            .sort((a, b) => a.descripcion.localeCompare(b.descripcion))
+            .map(i => `
+        <label>
+          <input type="checkbox" value="${i.descripcion}"
+            ${featuredNames.includes(i.descripcion) ? 'checked' : ''}>
+          <span>${i.descripcion}</span>
+          <span class="config-stock">${i.cantidadStock} u.</span>
+        </label>
+      `).join('');
 
-    document
-            .getElementById(id)
-            .classList.add('open');
+    openModal('modal-config');
   }
 
-  function closeModal(id) {
-
-    document
-            .getElementById(id)
-            .classList.remove('open');
+  function confirmarConfig() {
+    const checks  = document.querySelectorAll('#config-ingredientes input[type="checkbox"]:checked');
+    featuredNames = [...checks].map(c => c.value);
+    closeModal('modal-config');
+    renderCards();
   }
 
-  /* ─────────────────────────────────────────────────────────────
-     Status
-     ───────────────────────────────────────────────────────────── */
+  /* ============================================================
+     MODAL HELPERS
+     ============================================================ */
+  function openModal(id)  { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
+  document.querySelectorAll('.modal-backdrop').forEach(el =>
+          el.addEventListener('click', e => { if (e.target === el) closeModal(el.id); })
+  );
+
+  /* ============================================================
+     STATUS
+     ============================================================ */
   function setStatus(msg, ok) {
-
-    document.getElementById(
-            'status-text'
-    ).textContent = msg;
-
-    document.getElementById(
-            'status-dot'
-    ).className =
-            'status-dot' + (ok ? '' : ' error');
+    document.getElementById('status-text').textContent = msg;
+    document.getElementById('status-dot').className = 'status-dot' + (ok ? '' : ' error');
   }
 
-  /* ─────────────────────────────────────────────────────────────
-     Init
-     ───────────────────────────────────────────────────────────── */
-
+  /* ============================================================
+     INIT
+     ============================================================ */
   cargarDespensa();
 </script>
 </body>
