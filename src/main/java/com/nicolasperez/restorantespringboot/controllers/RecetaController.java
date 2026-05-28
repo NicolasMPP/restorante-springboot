@@ -91,4 +91,16 @@ public class RecetaController {
                 recetaService.obtenerRecetasPorComplejidad()
         );
     }
+    // ── GET /api/recetas/nombre/{nombre} ───────────────────────────
+// Usado por el panel de detalle para cargar ingredientes
+    @GetMapping("/nombre/{nombre}")
+    public ResponseEntity<Receta> obtenerPorNombre(
+            @PathVariable String nombre
+    ) {
+        Receta receta = recetaService.obtenerPorNombre(nombre);
+
+        return receta != null
+                ? ResponseEntity.ok(receta)
+                : ResponseEntity.notFound().build();
+    }
 }

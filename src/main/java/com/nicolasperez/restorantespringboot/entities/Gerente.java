@@ -1,6 +1,7 @@
 
 package com.nicolasperez.restorantespringboot.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,10 @@ public class Gerente extends Persona {
     // Solo se diferencian por estar en tabla separada
     
     // Relaciones
-    
+    @JsonIgnore
     @OneToMany(mappedBy = "gerente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Menu> menus = new ArrayList<>();
-    
+    @JsonIgnore
     @OneToMany(mappedBy = "gerente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Despensa> despensas = new ArrayList<>();
     

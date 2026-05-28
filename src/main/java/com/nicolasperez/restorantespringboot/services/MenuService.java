@@ -58,7 +58,8 @@ public class MenuService {
 
     private AlimentoDetalleDTO mapearADTO(Alimento a) {
 
-        Receta r = a.getReceta();
+        Receta   r    = a.getReceta();
+        Empleado chef = (r != null) ? r.getChef() : null;
 
         String tipo = switch (a.getClass().getSimpleName()) {
             case "PlatoFuerte"  -> "PLATO_FUERTE";
@@ -68,22 +69,17 @@ public class MenuService {
             default             -> "GENERAL";
         };
 
-        String nombreReceta      = r != null ? r.getNombreReceta()       : "Sin receta";
-        String descripcion       = r != null ? r.getDescripcionProceso() : "No requiere preparación";
-        String chefNombre        = (r != null && r.getChef() != null)
-                ? r.getChef().getNombre()
-                : "N/A";
-        long   totalIngredientes = r != null ? r.getIngredientes().size() : 0L;
-
         return new AlimentoDetalleDTO(
                 a.getId(),
                 a.getNombre(),
                 a.getPrecio(),
                 tipo,
-                nombreReceta,
-                descripcion,
-                chefNombre,
-                totalIngredientes
+                r    != null ? r.getId()              : null,      // recetaId
+                r    != null ? r.getNombreReceta()     : "Sin receta",
+                r    != null ? r.getDescripcionProceso(): "No requiere preparación",
+                r    != null ? (long) r.getIngredientes().size() : 0L,
+                chef != null ? chef.getId()            : null,     // chefId
+                chef != null ? chef.getNombre()        : "N/A"
         );
     }
 

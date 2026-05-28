@@ -1,5 +1,6 @@
 package com.nicolasperez.restorantespringboot.controllers;
 
+import com.nicolasperez.restorantespringboot.dto.AlimentoCompletoRequest;
 import com.nicolasperez.restorantespringboot.dto.AlimentoDetalleDTO;
 import com.nicolasperez.restorantespringboot.entities.Menu;
 import com.nicolasperez.restorantespringboot.repositories.MenuRepository;
@@ -80,7 +81,29 @@ public class MenuController {
                 "Alimento agregado correctamente"
         );
     }
+    // ── POST /api/menu/{menuId}/alimento-completo ──────────────────
+// Crea receta + ingredientes + alimento y lo agrega al menú
+// Body: AlimentoCompletoRequest
+    @PostMapping("/{menuId}/alimento-completo")
+    public ResponseEntity<String> crearAlimentoCompleto(
+            @PathVariable Integer menuId,
+            @RequestBody AlimentoCompletoRequest request
+    ) {
+        boolean ok = menuService.crearAlimentoCompleto(
+                request.getNombreAlimento(),
+                request.getPrecio(),
+                request.getTipo(),
+                request.getNombreReceta(),
+                request.getDescripcionProceso(),
+                request.getChefCedula(),
+                request.getIngredientesDescripciones(),
+                menuId
+        );
 
+        return ok
+                ? ResponseEntity.ok("Alimento creado correctamente")
+                : ResponseEntity.badRequest().body("No se pudo crear el alimento");
+    }
     // ============================================================
     // ESTADÍSTICAS
     // ============================================================

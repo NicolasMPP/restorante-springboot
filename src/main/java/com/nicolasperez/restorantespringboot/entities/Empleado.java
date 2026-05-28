@@ -1,5 +1,6 @@
 package com.nicolasperez.restorantespringboot.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -38,6 +39,7 @@ public class Empleado extends Persona implements Serializable {
     protected BigDecimal salario;
     
     // Relaciones
+    @JsonIgnore
     @OneToMany(mappedBy = "chef", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Receta> recetas = new ArrayList<>();
     

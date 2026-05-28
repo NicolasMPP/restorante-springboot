@@ -1,6 +1,7 @@
 
 package com.nicolasperez.restorantespringboot.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -40,7 +41,8 @@ public class Alimento implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receta_id", nullable = true)
     protected Receta receta;
-    
+
+    @JsonIgnore
     @ManyToMany(mappedBy = "alimentos")
     protected List<Menu> menus = new ArrayList<>();
     
