@@ -10,6 +10,7 @@ const MENU_ID          = 1;
 
 let menuItems   = [];   // AlimentoDetalleDTO[]
 let selectedRow = -1;
+let alimentoIdEditando = null; // null = modo crear | número = modo editar
 
 /* ══════════════════════════════════════════════════════════════
    CARGA INICIAL
@@ -227,6 +228,8 @@ function closeDetail() { document.getElementById('detail-panel').classList.remov
    GET /api/chefs         →  poblar select de chef
    ══════════════════════════════════════════════════════════════ */
 async function openAddModal() {
+    alimentoIdEditando = null;   // ← asegurar modo crear
+    document.getElementById('modal-add-title').textContent = 'Agregar Nuevo Alimento al Menú'; // ← resetear título
     hideModalErrors();
 
     // Limpiar estado anterior
@@ -273,8 +276,11 @@ async function openAddModal() {
 }
 
 function closeAddModal() {
-    if (confirm('¿Cancelar? Se perderán los datos ingresados.'))
+    if (confirm('¿Cancelar? Se perderán los datos ingresados.')) {
+        alimentoIdEditando = null;   // ← limpiar modo edición
+        document.getElementById('modal-add-title').textContent = 'Agregar Nuevo Alimento al Menú';
         document.getElementById('modal-backdrop').classList.remove('open');
+    }
 }
 
 function closeOnBackdrop(e) {
@@ -326,29 +332,174 @@ async function guardarAlimento() {
     if (errors.length) { showModalErrors(errors); return; }
 
     try {
-        const res = await fetch(`${API_MENU}/${MENU_ID}/alimento-completo`, {
-            method:  'POST',
+        // ── POST si es nuevo, PUT si es edición ───────────────────
+        const url = alimentoIdEditando
+            ? `${API_MENU}/${MENU_ID}/alimento-completo/${alimentoIdEditando}`
+            : `${API_MENU}/${MENU_ID}/alimento-completo`;
+
+        const method = alimentoIdEditando ? 'PUT' : 'POST';
+
+        const res = await fetch(url, {
+            method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                nombreAlimento:              nombre,
-                precio:                      precio,
-                tipo:                        tipo,
-                nombreReceta:                receta,
-                descripcionProceso:          proceso,
-                chefCedula:                  chefCedula,
-                ingredientesDescripciones:   ingredientes,
+                nombreAlimento:            nombre,
+                precio,
+                tipo,
+                nombreReceta:              receta,
+                descripcionProceso:        proceso,
+                chefCedula,
+                ingredientesDescripciones: ingredientes,
             }),
         });
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
+        const accion = alimentoIdEditando ? 'actualizado' : 'agregado al menú';
         document.getElementById('modal-backdrop').classList.remove('open');
+        alimentoIdEditando = null;
         await cargarMenu();
-        setStatus(`✓ "${nombre}" agregado al menú`, true);
+        setStatus(`✓ "${nombre}" ${accion}`, true);
 
     } catch (err) {
         console.error('[guardarAlimento]', err);
         showModalErrors(['Error al guardar. Revisá la consola para más detalles.']);
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ELIMINAR ALIMENTO DEL MENÚ
+   DELETE /api/menu/{menuId}/alimentos/{alimentoId}
+   ══════════════════════════════════════════════════════════════ */
+async function eliminarAlimento() {
+    if (selectedRow < 0) {
+        alert('Seleccioná un alimento de la tabla primero.');
+        return;
+    }
+
+    const it = menuItems[selectedRow];
+
+    if (!confirm(
+        `¿Eliminar "${it.alimentoNombre}" del menú?\n\n` +
+        `El alimento se desvincula del menú, pero su receta e ingredientes quedan en el sistema.`
+    )) return;
+
+    try {
+        const res = await fetch(
+            `${API_MENU}/${MENU_ID}/alimentos/${it.alimentoId}`,
+            { method: 'DELETE' }
+        );
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        clearSelection();
+        await cargarMenu();
+        setStatus(`✓ "${it.alimentoNombre}" eliminado del menú`, true);
+
+    } catch (err) {
+        console.error('[eliminarAlimento]', err);
+        setStatus('✗ Error al eliminar alimento', false);
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ABRIR MODAL EN MODO EDICIÓN
+   GET /api/menu/{menuId}/alimentos/{alimentoId}  →  datos completos
+   GET /api/chefs                                 →  select chef
+   GET /api/ingredientes                          →  listas picker
+   ══════════════════════════════════════════════════════════════ */
+async function abrirModalEdicion() {
+    if (selectedRow < 0) {
+        alert('Seleccioná un alimento de la tabla primero.');
+        return;
+    }
+
+    const it = menuItems[selectedRow];
+    alimentoIdEditando = it.alimentoId;
+
+    hideModalErrors();
+
+    try {
+        // Tres llamadas en paralelo
+        const [resAlimento, resChefs, resIngs] = await Promise.all([
+            fetch(`${API_MENU}/${MENU_ID}/alimentos/${it.alimentoId}`),
+            fetch(API_CHEFS),
+            fetch(API_INGREDIENTES),
+        ]);
+
+        if (!resAlimento.ok) throw new Error(`HTTP ${resAlimento.status} al cargar alimento`);
+        if (!resChefs.ok)    throw new Error(`HTTP ${resChefs.status} al cargar chefs`);
+        if (!resIngs.ok)     throw new Error(`HTTP ${resIngs.status} al cargar ingredientes`);
+
+        const [alimento, chefs, todosIngs] = await Promise.all([
+            resAlimento.json(),
+            resChefs.json(),
+            resIngs.json(),
+        ]);
+
+        // ── Poblar select de chefs ────────────────────────────────
+        const selChef = document.getElementById('f-chef');
+        selChef.innerHTML =
+            '<option value="">— Seleccionar chef —</option>' +
+            chefs.map(c => `<option value="${c.cedula}">${c.nombre}</option>`).join('');
+
+        // ── Pre-poblar campos básicos ─────────────────────────────
+        document.getElementById('f-nombre').value = alimento.nombre  ?? '';
+        document.getElementById('f-precio').value = alimento.precio  ?? '';
+
+        // Mapear nombre de clase → valor del select
+        const tipoMap = {
+            PlatoFuerte: 'PLATO_FUERTE',
+            Postres:     'POSTRE',
+            Bebida:      'BEBIDA',
+            Adicionales: 'ADICIONAL',
+        };
+        document.getElementById('f-tipo').value =
+            tipoMap[alimento.tipoAlimento] ?? alimento.tipoAlimento ?? 'PLATO_FUERTE';
+
+        // ── Pre-poblar receta ─────────────────────────────────────
+        const receta = alimento.receta;
+        document.getElementById('f-receta').value  = receta?.nombreReceta       ?? '';
+        document.getElementById('f-proceso').value = receta?.descripcionProceso ?? '';
+
+        // Pre-seleccionar chef
+        if (receta?.chef?.cedula) {
+            selChef.value = receta.chef.cedula;
+        }
+
+        // ── Distribuir ingredientes en el picker ──────────────────
+        const selDisp = document.getElementById('lst-disponibles');
+        const selSel  = document.getElementById('lst-seleccionados');
+        selDisp.innerHTML = '';
+        selSel.innerHTML  = '';
+
+        const ingsEnReceta = new Set(
+            (receta?.ingredientes ?? []).map(i => i.descripcion)
+        );
+
+        todosIngs
+            .sort((a, b) => a.descripcion.localeCompare(b.descripcion))
+            .forEach(i => {
+                const opt = new Option(
+                    `${i.descripcion} (Stock: ${i.cantidadStock})`,
+                    i.descripcion
+                );
+                if (ingsEnReceta.has(i.descripcion)) {
+                    selSel.appendChild(opt);
+                } else {
+                    selDisp.appendChild(opt);
+                }
+            });
+
+        updateIngCount();
+
+        // ── Cambiar título y abrir ────────────────────────────────
+        document.getElementById('modal-add-title').textContent = 'Editar Alimento';
+        document.getElementById('modal-backdrop').classList.add('open');
+
+    } catch (err) {
+        console.error('[abrirModalEdicion]', err);
+        alimentoIdEditando = null;
+        alert('No se pudieron cargar los datos del alimento.');
     }
 }
 

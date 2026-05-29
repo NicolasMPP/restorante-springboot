@@ -91,6 +91,9 @@
       <div class="action-bar">
         <button class="btn btn-ghost btn-sm"  onclick="verReceta()">📋 Ver Detalle Receta</button>
         <button class="btn btn-ghost btn-sm"  onclick="verChef()">👨‍🍳 Ver Chef</button>
+        <button class="btn btn-ghost btn-sm"  onclick="abrirModalEdicion()">✎ Editar Alimento</button>
+        <button class="btn btn-ghost btn-sm"  onclick="eliminarAlimento()">🗑 Eliminar Alimento</button>
+
         <button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="clearSelection()">✕ Limpiar selección</button>
       </div>
 
@@ -113,7 +116,7 @@
   <div class="modal-lg">
 
     <div class="modal-header">
-      <span class="modal-title">Agregar Nuevo Alimento al Menú</span>
+      <span class="modal-title" id="modal-add-title">Agregar Nuevo Alimento al Menú</span>
       <button class="modal-close" onclick="closeAddModal()">✕</button>
     </div>
 

@@ -182,6 +182,128 @@ public class MenuService {
             return false;
         }
     }
+    // ── Tarea 4 ────────────────────────────────────────────────────
+// Actualiza nombre, precio, tipo, receta, chef e ingredientes.
+// Si el alimento no tenía receta, la crea.
+// Si el tipo cambió, actualiza el discriminador via SQL nativo.
+    public boolean actualizarAlimentoCompleto(
+            Integer      alimentoId,
+            String       nombreAlimento,
+            BigDecimal   precio,
+            String       tipo,
+            String       nombreReceta,
+            String       descripcionProceso,
+            String       chefCedula,
+            List<String> ingredientesDescripciones
+    ) {
+        // 1. Buscar alimento existente
+        Alimento alimento = alimentoRepository
+                .findById(alimentoId)
+                .orElse(null);
+
+        if (alimento == null) {
+            System.err.println("Alimento no encontrado: " + alimentoId);
+            return false;
+        }
+
+        // 2. Actualizar campos básicos
+        alimento.setNombre(nombreAlimento);
+        alimento.setPrecio(precio);
+        alimentoRepository.save(alimento);
+
+        // 3. Actualizar tipo si cambió
+        //    Hibernate no toca el discriminador en merge, lo hacemos
+        //    con SQL nativo dentro de la misma transacción
+        String tipoActual = switch (alimento.getClass().getSimpleName()) {
+            case "PlatoFuerte"  -> "PLATO_FUERTE";
+            case "Postres"      -> "POSTRE";
+            case "Bebida"       -> "BEBIDA";
+            case "Adicionales"  -> "ADICIONAL";
+            default             -> "GENERAL";
+        };
+
+        if (!tipoActual.equals(tipo)) {
+            alimentoRepository.actualizarTipo(alimentoId, tipo);
+        }
+
+        // 4. Buscar chef por cédula
+        Chef chef = chefRepository
+                .findByCedula(chefCedula)
+                .orElse(null);
+
+        if (chef == null) {
+            System.err.println("Chef no encontrado: " + chefCedula);
+            return false;
+        }
+
+        // 5. Actualizar receta (o crear si el alimento no tenía)
+        Receta receta = alimento.getReceta();
+
+        if (receta == null) {
+
+            // El alimento no tenía receta (era bebida, etc.) → crear
+            receta = new Receta(nombreReceta, descripcionProceso, chef);
+            receta = recetaRepository.save(receta);
+
+            alimento.setReceta(receta);
+            alimentoRepository.save(alimento);
+
+        } else {
+
+            // Actualizar campos de la receta existente
+            receta.setNombreReceta(nombreReceta);
+            receta.setDescripcionProceso(descripcionProceso);
+            receta.setChef(chef);
+
+            // 6. Sincronizar ingredientes:
+            //    limpiar la lista actual y re-agregar los seleccionados
+            receta.getIngredientes().clear();
+
+            for (String descripcion : ingredientesDescripciones) {
+                ingredienteRepository
+                        .findByDescripcion(descripcion)
+                        .ifPresent(receta.getIngredientes()::add);
+            }
+
+            recetaRepository.save(receta);
+        }
+
+        return true;
+    }
+    // ── Tarea 2: GET alimento completo ────────────────────────────
+    public Alimento obtenerAlimentoDelMenu(
+            Integer menuId,
+            Integer alimentoId
+    ) {
+        return menuRepository
+                .obtenerAlimentoCompleto(menuId, alimentoId)
+                .orElse(null);
+    }
+
+    // ── Tarea 1: DELETE — desvincular del menú ────────────────────
+    public boolean removerAlimentoDelMenu(
+            Integer menuId,
+            Integer alimentoId
+    ) {
+        Optional<Menu> menuOpt =
+                menuRepository.obtenerMenuCompleto(menuId);
+
+        Optional<Alimento> alimentoOpt =
+                alimentoRepository.findById(alimentoId);
+
+        if (menuOpt.isEmpty() || alimentoOpt.isEmpty()) {
+            return false;
+        }
+
+        Menu menu = menuOpt.get();
+
+        // Elimina la relación en menu_alimentos, no el alimento
+        menu.getAlimentos().remove(alimentoOpt.get());
+
+        menuRepository.save(menu);
+
+        return true;
+    }
 
     // ============================================================
     // UTILIDAD

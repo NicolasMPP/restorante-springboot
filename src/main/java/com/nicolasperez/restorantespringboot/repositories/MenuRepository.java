@@ -6,6 +6,7 @@ import com.nicolasperez.restorantespringboot.entities.Menu;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -76,6 +77,23 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
             WHERE m.id = :menuId
             """)
     Long contarAlimentos(Integer menuId);
+
+    // GET /api/menu/{menuId}/alimentos/{alimentoId}
+// Carga el alimento con receta, chef e ingredientes en una sola query
+    @Query("""
+    SELECT DISTINCT a
+    FROM Menu m
+    JOIN m.alimentos a
+    LEFT JOIN FETCH a.receta r
+    LEFT JOIN FETCH r.chef
+    LEFT JOIN FETCH r.ingredientes
+    WHERE m.id = :menuId
+    AND   a.id = :alimentoId
+    """)
+    Optional<Alimento> obtenerAlimentoCompleto(
+            @Param("menuId")     Integer menuId,
+            @Param("alimentoId") Integer alimentoId
+    );
 
     // ============================================================
     // ESTADISTICAS
