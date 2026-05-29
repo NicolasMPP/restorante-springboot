@@ -80,7 +80,36 @@ Abra su gestor de MySQL y cree una base de datos vacía llamada `proyectorestora
           CHARACTER SET utf8mb4 
           COLLATE utf8mb4_unicode_ci; 
    ```
-   
+
+### Configurar las Credenciales
+El proyecto está configurado por defecto en el archivo src/main/resources/application.properties:
+```
+Properties
+spring.application.name=restorante-springboot
+
+spring.datasource.url=jdbc:mysql://localhost:3306/proyectorestorante?serverTimeZone=UTC
+spring.datasource.username= TU_USUARIO_AQUÍ
+spring.datasource.password=TU_CONTRASEÑA_AQUÍ
+
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+```
+⚠️ Nota: Si tu usuario de MySQL tiene contraseña, recordá colocarla en la propiedad spring.datasource.password. Al iniciar, Hibernate creará las tablas automáticamente (ddl-auto=update).
+
+### Ejecutar la Aplicación
+
+Al ser un frontend estático integrado, el backend se encarga de servir los archivos de la interfaz desde la ruta src/main/resources/static.
+
+* Desde tu IDE (IntelliJ IDEA / Eclipse): Ejecuta la clase principal RestoranteSpringbootApplication.java.
+
+* Opción recomendada: Desde la terminal usando Gradle Wrapper:
+```
+Bash
+./gradlew bootRun
+```
+
+Descargará toda las dependencias necesarias para ejecutar el proyecto.
+
 ### Una vez que el servidor inicie, abre tu navegador web e ingresa a:
 
 ```
